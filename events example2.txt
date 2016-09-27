@@ -1,0 +1,103 @@
+
+<!-- unsupported -->
+<![CDATA[
+<extev>
+ <code>3000</code>
+ <contents>
+  <content>
+   <name>severity</name>
+   <value>warning</value>
+  </content>
+  <content>
+   <name>message</name>
+   <value>Current recipe is paused due to local maintenance</value>
+  </content>
+ </contents>
+</extev>
+ ]]>
+ 
+ 
+<!-- info -->
+<![CDATA[
+<extev>
+ <code>20001</code>
+ <contents>
+  <content>
+   <name>severity</name>
+   <value>info</value>
+  </content>
+  <content>
+   <name>message</name>
+   <value>Current recipe is paused due to local maintenance</value>
+  </content>
+ </contents>
+</extev>
+ ]]>
+ 
+ <!-- warning -->
+<![CDATA[
+<extev>
+ <code>20001</code>
+ <contents>
+  <content>
+   <name>severity</name>
+   <value>warning</value>
+  </content>
+  <content>
+   <name>message</name>
+   <value>Current recipe is paused due to local maintenance</value>
+  </content>
+ </contents>
+</extev>
+ ]]>
+ 
+ <!-- error -->
+<![CDATA[
+<extev>
+ <code>20001</code>
+ <contents>
+  <content>
+   <name>severity</name>
+   <value>error</value>
+  </content>
+  <content>
+   <name>message</name>
+   <value>Light XYZ is broken</value>
+  </content>
+ </contents>
+</extev>
+ ]]>
+ 
+ <!-- bad format 1 -->
+<![CDATA[
+<extev>
+ <code>20001</code>
+ <contents>
+  <content>
+   <name>aaaaa</name>
+   <value>info</value>
+  </content>
+  <content>
+   <name>message</name>
+   <value>Current recipe is paused due to local maintenance</value>
+  </content>
+ </contents>
+</extev>
+ ]]>
+ 
+ <!-- bad format 2 -->
+<![CDATA[
+<extev>
+ <code>20001</code>
+ <contents>
+  <content>
+   <name>severity</name>
+   <value>info</value>
+  </content>
+  <content>
+   <name>aaaaa</name>
+   <value>Current recipe is paused due to local maintenance</value>
+  </content>
+ </contents>
+</extev>
+ ]]>
