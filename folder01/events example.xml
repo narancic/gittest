@@ -1,0 +1,75 @@
+<!-- Example for AquaLED -->
+<![CDATA[
+<extev>
+ <code>3000</code>
+ <contents>
+  <content>
+   <name>alarm</name>
+   <value>Light 123 in cage 3 is broken</value>
+  </content>
+  <content>
+   <name>warning</name>
+   <value>Current recipe is paused due to local maintenance.</value>
+  </content>
+ </contents>
+</extev>
+ ]]>
+
+
+
+ 
+ 
+
+<!-- Example for social networking -->
+<extev>
+ <code>1000</code>
+ <contents>
+  <content>
+   <name>operation</name>
+   <value>1</value> <!-- 1 = post separately, 2 = post to album-->
+  </content>
+  <content>
+   <name>postVisibility</name>
+   <value>2</value> <!-- 1 = public, 2 = private, 3 = both-->
+  </content>
+  <content>
+   <name>targetNetworks</name>
+   <value>1</value> <!-- 1 = Facebook, 2 = Twitter, 3 = both-->
+  </content>
+  <content>
+   <name>comment</name>
+   <value>Comment to be posted on Social network...</value>
+  </content>
+  <content>
+   <name>group</name>
+   <value>Group (album) name if photos are posted to an album on Social network...</value>
+  </content>
+  <content>
+   <name>additional</name>
+   <value>Additional comment...if needed</value>
+  </content>
+  <content>
+   <name>fileList</name>
+   <value> <![CDATA[
+    <fileToPublish>
+     <fileType>1</fileType>
+     <fileName>T-Shirt</fileName>
+     <filePath>/home/prs/ExperiencePlayer/tempLuaPicsRepository/socnetpicture_12345.jpg</filePath>
+     <comment>Check out this T-shirt</comment>
+     <operation></operation> <!-- placeholder for future modifications-->
+     <additional></additional> <!-- placeholder for future modifications-->
+    </fileToPublish>
+    <fileToPublish>
+     <fileType>1</fileType>
+     <fileName>T-Shirt 2</fileName>
+     <filePath>/home/prs/ExperiencePlayer/tempLuaPicsRepository/socnetpicture_54321.jpg</filePath>
+     <filePath>/home/prs/ExperiencePlayer/empLuaPicsRepository/socnetpicture_12345.jpg</filePath>
+     <comment>Check out this T-shirt - angle 2</comment>
+     <operation></operation> <!-- placeholder for future modifications-->
+     <additional></additional> <!-- placeholder for future modifications-->
+    </fileToPublish>
+    ]]>
+   </value>
+  </content>
+ </contents>
+</extev>
