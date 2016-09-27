@@ -1,0 +1,178 @@
+<!--
+ *
+ *
+ *  Copyright (c) 2015 Philips Lighting BV
+ *  Building EEAp 019, PO Box 80020, 5600JM, Eindhoven, The Netherlands
+ *
+ *  All Rights Reserved
+ *
+ *  P R O P R I E T A R Y    &    C O N F I D E N T I A L
+ *
+ *  *****************************************************
+ *  http://www.Philips.com
+ *  *****************************************************
+ *
+ * \file build.xml
+ * \brief
+ * ANT build file, used to build jar archive which contains VPN firewall rules setting logic
+ *  
+ * Created on 27 Jan 2015
+ *
+ * @Author Nemanja Ignjatov
+ * \notes
+ * 
+ * \history
+ * 27 Jan 2015 Initial version
+-->
+
+<project name="VpnSecurity" default="make.jar" basedir=".">
+	<property name="library.store" value="../ExperienceLibraries"/>
+	<property name="project-name" value="VpnSecurity"/>
+	<property name="artifact.dir" value="artifacts"/>
+	<property name="deploy.dir" value="deploy"/>
+	<property name="lib.dir" value="${deploy.dir}/VpnSecurity_lib"/>
+	<property name="lib.dir.prefix" value="VpnSecurity_lib"/>
+    <property name="class.dir" value="bin"/>
+    <property name="javac.deprecation" value="false"/>
+    <property name="javac.debug" value="true"/>
+   	<property name="src.dir" value="src"/>
+   	<property name="doc.dir" value="doc"/>
+   	<property name="application.name" value="VpnSecurity.jar"/>
+   	<property name="version.class" value="com/philips/retailsolutions/experiencerunner/commons/CommonConstants.java"/>
+   	<property name="version.string" value="X.Y.ABCDE"/>
+   	<property name="major.version" value="1"/>
+   	<property name="minor.version" value="0"/>
+    <property name="em.commoms.dir" value="../ExperienceManagerCommons"/>
+	<property name="target.dir" value="target" />
+	<property name="instrumentedclasses.dir" value="${target.dir}/instrumentedclasses" />
+	<property name="coveragereport.dir" value="${target.dir}/site/cobertura" />
+	<property name="cobertura.dir" value="${library.store}/utils/cobertura" />
+    
+    <fileset id="prs-lib" dir="${library.store}">
+    	<include name="slf4j-api-1.6.1.jar" />
+    	<include name="slf4j-log4j12-1.6.1.jar" />
+    </fileset>
+	
+    <fileset id="commons-lib" dir="${library.store}/commons">
+        <include name="**/*.jar" />
+    </fileset>
+	
+    <fileset id="hornetq-lib" dir="${library.store}/hornetq">
+        <include name="**/*.jar" />
+    </fileset>
+	
+    <fileset id="jboss-lib" dir="${library.store}/jboss">
+        <include name="**/*.jar" />
+    </fileset>
+    	
+	<fileset id="our-lib" dir="${library.store}/our">
+		<include name="**/*.jar" />
+    </fileset>
+	
+    <fileset id="utils-lib" dir="${library.store}/utils">
+        <include name="**/*.jar" />
+    </fileset> 
+	
+    <fileset id="em-commons-lib" dir="${em.commoms.dir}/artifact">
+        <include name="*.jar" />
+    </fileset>
+	
+	<path id="cobertura.classpath">
+	    <fileset dir="${cobertura.dir}">
+	        <include name="cobertura.jar" />
+	        <include name="lib/**/*.jar" />
+	    </fileset>
+	</path>
+    
+    <path id="build.classpath">
+        <fileset refid="prs-lib"/>
+    	<fileset refid="commons-lib"/>
+    	<fileset refid="hornetq-lib"/>
+    	<fileset refid="jboss-lib"/>
+    	<fileset refid="our-lib"/>
+    	<fileset refid="utils-lib"/>	
+    	<fileset refid="em-commons-lib"/>
+    </path>
+	
+	<path id="lib.classpath">
+	  <fileset dir="${library.store}">
+	    <include name="**/*.jar" />
+	  </fileset>
+	</path>
+	
+	<taskdef classpathref="cobertura.classpath" resource="tasks.properties" />
+	
+		<!-- Clean-up build directory -->
+    <target name="clean">
+        <delete dir="${class.dir}"/>
+        <delete file="${artifact.dir}"/>
+    	<delete dir="${lib.dir}"/>
+    	<delete dir="${deploy.dir}"/>
+    	<delete dir="${target.dir}"/>
+    </target>
+	
+	<!--  Create dirs that are needed in build process if they do not exist -->
+	<target name="make.dirs">
+        <mkdir dir="${class.dir}"/>
+		<mkdir dir="${artifact.dir}"/>
+		<mkdir dir="${deploy.dir}"/>
+		<mkdir dir="${lib.dir}"/>
+		<mkdir dir="${target.dir}"/>
+    </target>
+	
+    <!-- Compile JAVA application -->
+    <target name="compile" depends="clean,make.dirs" description="Compile the Java source code">
+        <javac classpathref="build.classpath" 
+        	   destdir="${class.dir}" 
+        	   debug="${javac.debug}" 
+        	   source="1.6"
+               target="1.6"
+        	   deprecation="${javac.deprecation}" 
+        	   nowarn="on">
+               <src path="${src.dir}"/>
+        </javac>
+    </target>
+	
+	<!-- create runnable jar -->
+    <target name="make.jar" depends="compile">
+        <jar destfile="${application.name}" basedir="bin" includes="**/*.class">
+            <manifest>
+                <attribute name="Main-Class" value="com.philips.retailsolutions.vpnsecurity.VPNSecurity"/>
+            	<attribute name="Class-Path" value=". ${lib.dir.prefix}/jnp-client.jar ${lib.dir.prefix}/jboss-javaee.jar ${lib.dir.prefix}/c3p0-0.9.1.1.jar ${lib.dir.prefix}/concurrent.jar ${lib.dir.prefix}/commons-codec-1.6.jar ${lib.dir.prefix}/commons-logging-1.1.1.jar ${lib.dir.prefix}/netty.jar ${lib.dir.prefix}/log4j-1.2.16.jar ${lib.dir.prefix}/slf4j-api-1.6.1.jar ${lib.dir.prefix}/slf4j-log4j12-1.6.1.jar ${lib.dir.prefix}/hornetq-core-client.jar ${lib.dir.prefix}/hornetq-jms-client.jar ${lib.dir.prefix}/hornetq-jms.jar ${lib.dir.prefix}/jboss-jms-api_1.1_spec.jar ${lib.dir.prefix}/jboss-logging.jar ${lib.dir.prefix}/ExperienceManagerCommons.jar"/>
+            </manifest>
+            <fileset file="src/log4j.xml"/>
+        </jar>
+    </target>
+	
+    <!-- Add revision number to the latest code -->
+    <target name="set.version">
+        <replace file="${src.dir}/${version.class}" token="X.Y.ABCDE" value="${major.version}.${minor.version}.${env.SVN_REVISION}"/>
+    </target>
+	
+	<!-- Add revision number to the latest code (for Hudson) -->
+    <target name="set.version.local">
+        <replace file="${src.dir}/${version.class}" token="X.Y.ABCDE" value="${major.version}.${minor.version}.${env.EC_SVN}"/>
+    </target>
+	
+    <!--
+		 - make doc files
+	-->
+    <target name="doc" depends="make.dirs">
+        <mkdir dir="${doc.dir}"/>
+        <javadoc packagenames="com.philips.retailsolutions.vpnsecurity.*" sourcepath="${src.dir}" classpathref="build.classpath" destdir="${doc.dir}" author="true" version="true" verbose="true" use="true" windowtitle="VPNSecurity" doctitle="E-Mu Jukebox" bottom="Copyright ɠ2009-10 Philips Retail Solutions. All Rights Reserved."/>
+    </target>
+	
+	<target name="run.cobertura" depends="make.jar">
+		<cobertura-instrument todir="${instrumentedclasses.dir}">
+		    <includeclasses regex=".*" />
+		    <excludeclasses regex=".*\.Test.*" />
+	
+		    <instrumentationClasspath>
+		        <!--<path refid="test.classpath" />-->
+		        <pathelement location="${class.dir}" />
+		    </instrumentationClasspath>
+		</cobertura-instrument>
+		
+		<cobertura-report format="xml" destdir="${coveragereport.dir}" srcdir="${src.dir}" />
+	</target>
+</project>

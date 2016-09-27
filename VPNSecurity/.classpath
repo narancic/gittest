@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<classpath>
+	<classpathentry kind="src" path="src"/>
+	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER/org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType/JavaSE-1.7"/>
+	<classpathentry kind="lib" path="/ActiveSiteLibraries/utils/log4j-1.2.16.jar"/>
+	<classpathentry kind="lib" path="/ActiveSiteLibraries/hornetq/hornetq-core-client.jar"/>
+	<classpathentry kind="lib" path="/ActiveSiteLibraries/hornetq/hornetq-jms-client.jar"/>
+	<classpathentry kind="lib" path="/ActiveSiteLibraries/hornetq/hornetq-jms.jar"/>
+	<classpathentry kind="lib" path="/ActiveSiteLibraries/jboss/concurrent.jar"/>
+	<classpathentry kind="lib" path="/ActiveSiteLibraries/jboss/jboss-jms-api_1.1_spec.jar"/>
+	<classpathentry kind="lib" path="/ActiveSiteLibraries/our/activesite-commons.jar"/>
+	<classpathentry kind="lib" path="/ActiveSiteLibraries/commons/commons-codec-1.6.jar"/>
+	<classpathentry kind="lib" path="/ActiveSiteLibraries/commons/commons-logging-1.1.1.jar"/>
+	<classpathentry kind="lib" path="/ActiveSiteLibraries/c3p0-0.9.1.1.jar"/>
+	<classpathentry kind="lib" path="/ActiveSiteLibraries/netty.jar"/>
+	<classpathentry kind="lib" path="/ActiveSiteLibraries/slf4j-api-1.6.1.jar"/>
+	<classpathentry kind="lib" path="/ActiveSiteLibraries/slf4j-log4j12-1.6.1.jar"/>
+	<classpathentry kind="lib" path="/ActiveSiteLibraries/jboss/jboss-javaee.jar"/>
+	<classpathentry kind="lib" path="/ActiveSiteLibraries/jnp-client.jar"/>
+	<classpathentry kind="lib" path="/ActiveSiteLibraries/jboss/jboss-logging.jar"/>
+	<classpathentry kind="lib" path="/ActiveSiteLibraries/utils/cobertura/lib/asm-3.0.jar"/>
+	<classpathentry kind="lib" path="/ActiveSiteLibraries/utils/cobertura/lib/asm-tree-3.0.jar"/>
+	<classpathentry kind="lib" path="/ActiveSiteLibraries/utils/cobertura/lib/jakarta-oro-2.0.8.jar"/>
+	<classpathentry kind="lib" path="/ActiveSiteLibraries/utils/cobertura/lib/log4j-1.2.9.jar"/>
+	<classpathentry kind="lib" path="/ActiveSiteLibraries/utils/cobertura/cobertura.jar"/>
+	<classpathentry kind="output" path="bin"/>
+</classpath>

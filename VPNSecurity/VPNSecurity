@@ -1,0 +1,157 @@
+#!/bin/sh
+#
+# Starts VPNSecurity application
+
+#Set as startup application by:
+#sudo update-rc.d VPNSecurity defaults
+
+# copy .jar cfg/ ang log/ to /etc/VPNSecurity path
+#
+
+
+# *****************************************************************************
+# Check for the root rights presence
+# *****************************************************************************
+if test "`id -u`" -ne 0 ; then
+	echo "Script must be run with root rights. Exiting."
+	exit
+fi
+
+# script variables:
+VPNSEC_PATH="/etc/VPNSecurity"
+VPNSEC_JAR="VPNSecurity.jar"
+VPNSEC_JAVA_ARGS="-jar ${VPNSEC_PATH}/${VPNSEC_JAR} 6001 6002"
+VPNSEC_SHUT_DOWN_TIMEOUT=30
+VPNSEC_NAME="VPNSecurity"
+VPNSEC_PID_FILE="/var/run/${VPNSEC_NAME}.pid"
+NAME="VPNSecurity"
+JAVA_PATH="/usr/lib/jvm/java-7-openjdk-i386/jre/bin/"
+# Make sure the VPNSecurity application exists
+[ -f ${VPNSEC_PATH}/${VPNSEC_JAR} ] || exit 0
+
+# Get PID from process name
+_pgrep () {
+  echo $(ps ax| grep $1 | grep -v grep)
+}
+
+start() {
+  echo -n "Info: Starting VPNSecurity application: "
+  
+  # Check if process is already running
+  vpnsec_pid=""
+  vpnsec_pid=$(_pgrep $VPNSEC_JAR)
+  if [ ! -z "$vpnsec_pid" ]; then
+    echo "Warn: Process $VPNSEC_JAR [$vpnsec_pid] already exists. Exiting $NAME script"
+    exit 0
+  fi
+  
+  # Start while loop that checks if process is available
+  (
+    while true; do
+      #If script is run for the first time(colled by the OS after boot), 
+      #it has to create EP process
+      if [ -z "$(_pgrep $VPNSEC_JAR)" ]; then
+        # $VPNSEC_NAME doesn't exist
+        # Start EC process
+        cd ${VPNSEC_PATH}
+		export $(cat /etc/environment)
+        export PATH=$PATH:/usr/lib/jvm/java-7-openjdk-i386/jre/bin/
+		start-stop-daemon --start --pidfile ${VPNSEC_PID_FILE} --verbose --background --make-pidfile --exec ${JAVA_PATH}java -- ${VPNSEC_JAVA_ARGS}
+
+        #timeot to allow daemon to start EC process
+        sleep 1
+        # Check if process is started
+        if [ -z "$(_pgrep $VPNSEC_JAR)" ]; then
+          # Not started
+          echo "Warn: ${VPNSEC_NAME} not started"
+        else
+          # Process started
+          echo "Info: ${VPNSEC_NAME} started"
+        fi
+      fi
+      sleep 10
+    done
+  ) &
+  
+}
+
+stop() {
+  echo "Info: Stopping ${VPNSEC_NAME} application"
+    
+  # Check if process is already running
+  vpnsec_pid=""
+  vpnsec_pid=$(_pgrep $VPNSEC_JAR)
+  if [ -z "$vpnsec_pid" ]; then
+    echo "Warn: $VPNSEC_NAME is already stopped. Exiting $NAME script"
+    exit 0
+  fi
+  
+  if [ ! -f $VPNSEC_PID_FILE ];then  
+    echo "Warn: $VPNSEC_PID_FILE does not exist. "
+  fi 
+  
+  # stopping VPNSecurity process
+  # Try to close VPNSecurity in clean way, send "QUIT" message  and wat some time for client to close
+  start-stop-daemon -K -q -p ${VPNSEC_PID_FILE} > /dev/null 2>&1  
+        
+  I=0
+  # checking if EC is really stopped
+  while [ "$I" -le $VPNSEC_SHUT_DOWN_TIMEOUT ]
+  do
+    if [ -z "$(_pgrep $VPNSEC_JAR)" ]; then 
+      echo "Info: $VPNSEC_NAME stopped in $I seconds"
+      break;
+    fi
+    sleep 1
+    echo -n "$I "
+    I=$(expr $I + 1)
+  done
+  
+  # Checking if VPNSecurity process was closed in a clean way
+  if [ ! -z "$(_pgrep $VPNSEC_JAR)" ]; then 
+    echo "Warn: $VPNSEC_NAME is not stopped in $VPNSEC_SHUT_DOWN_TIMEOUT seconds. Killing it forcefully"
+    kill -9 $(_pgrep $VPNSEC_JAR)
+  fi
+  
+  # Checking if EC process was killed successfully
+  if [ ! -z "$(_pgrep $VPNSEC_JAR)" ]; then 
+    echo "Error: $VPNSEC_NAME was not killed"
+  fi
+  
+  rm -f $VPNSEC_PID_FILE
+}
+
+restart() {
+	stop
+	start
+}
+
+status() {
+	echo -n "Info: Checking status for $VPNSEC_JAR: "
+  vpnsec_spid="a"
+  vpnsec_spid=$(_pgrep $VPNSEC_JAR)
+        echo -n "RETURN  "$vpnsec_spid
+	if [ -z "$vpnsec_spid" ]; then
+    echo "$Info: VPNSEC_NAME running"
+	else
+    echo "Info: $VPNSEC_NAME is not running"
+	fi
+	                              
+}
+
+case "$1" in
+  start)
+  	start
+	;;
+  stop)
+  	stop
+	;;
+  restart|reload)
+  	restart
+	;;
+  *)
+	echo "Usage: $0 {start|stop|restart}"
+	exit 1
+esac
+
+exit $?
