@@ -12,8 +12,10 @@ import org.slf4j.LoggerFactory;
 import com.philips.retailsolutions.vpnsecurity.messaging.MessageCenter;
 import com.philips.retailsolutions.vpnsecurity.scriptcontrol.ScriptExecution;
 import com.philips.retailsolutions.vpnsecurity.scriptcontrol.VPNConnectionHandling;
-import com.philips.retailsolutions.vpnsecurity.scriptcontrol.VPNConnectionMonitoring;
 
+/**
+ * Entry point - main class.
+ */
 public class VPNSecurity {
 
 	private static Logger log = LoggerFactory.getLogger(VPNSecurity.class);
@@ -33,8 +35,7 @@ public class VPNSecurity {
 	 * @throws NamingException
 	 *             - on failure to create remote connection
 	 */
-	public static void main(String[] args) throws InterruptedException,
-			NamingException, JMSException {
+	public static void main(String[] args) throws InterruptedException, NamingException, JMSException {
 
 		if (args.length > 0) {
 			List<String> ports = new ArrayList<String>();
@@ -44,8 +45,7 @@ public class VPNSecurity {
 
 			// Set blocking FORWARD firewall rule
 			ScriptExecution.createBlockAllFirewallRule();
-			VPNConnectionHandling connHandling = new VPNConnectionHandling(
-					ports);
+			VPNConnectionHandling connHandling = new VPNConnectionHandling(ports);
 			startApplicationTasks(connHandling);
 			/* Catch CTRL+C to release the resources */
 			Runtime.getRuntime().addShutdownHook(new Thread() {
@@ -73,11 +73,9 @@ public class VPNSecurity {
 	 * @throws NamingException
 	 *             - on failure to create remote connection
 	 */
-	private static void startApplicationTasks(VPNConnectionHandling connHandling)
-			throws NamingException, JMSException {
+	private static void startApplicationTasks(VPNConnectionHandling connHandling) throws NamingException, JMSException {
 		messageCenter = MessageCenter.instance();
 		messageCenter.establishConnections(connHandling);
 	}
-
 
 }
