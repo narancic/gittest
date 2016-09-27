@@ -15,6 +15,7 @@ import com.philips.retailsolutions.vpnsecurity.scriptcontrol.VPNConnectionHandli
 
 /**
  * Entry point - main class.
+ * Feature02 branch
  */
 public class VPNSecurity {
 
